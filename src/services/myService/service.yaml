@@ -11,3 +11,5 @@ name: myService
 modules:
   facade:
     get: myService
+  curl-adapter:
+    get: curl-adapter

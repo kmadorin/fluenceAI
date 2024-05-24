@@ -9,3 +9,6 @@ version: 0
 type: rust
 
 name: myService
+
+mountedBinaries:
+  curl: /usr/bin/curl
