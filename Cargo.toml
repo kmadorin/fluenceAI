@@ -1,2 +1,5 @@
 [workspace]
-members = [ "src/services/myService/myService" ]
+members = [
+  "src/services/myService/myService",
+  "src/services/myService/curl-adapter"
+]

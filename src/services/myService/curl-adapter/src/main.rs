@@ -26,7 +26,7 @@
  }
  
  #[marine]
- #[link(wasm_import_module = "host")]
+ #[module_import("host")]
  extern "C" {
      fn curl(cmd: Vec<String>) -> MountedBinaryResult;
  }
