@@ -13,3 +13,5 @@ modules:
     get: myService
   curl-adapter:
     get: curl-adapter
+  gpt:
+    get: gpt
