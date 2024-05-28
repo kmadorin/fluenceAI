@@ -5,7 +5,10 @@ import {
   helloWorldRemote,
   runDeployedServices,
   showSubnet,
+  callOpenAI
 } from "./compiled-aqua/main.js";
+
+
 
 const appEl =
   document.querySelector("#app") ??
@@ -36,6 +39,18 @@ const aquaFunctions = [
     name: "runDeployedServices",
     fn() {
       return runDeployedServices();
+    },
+  },
+  {
+    name: "callOpenAI",
+    fn() {
+      const OPENAI_API_KEY = import.meta.env.VITE_OPENAI_API_KEY;
+      const model = 'gpt-3.5-turbo';
+      const messages = [{"role": "user", "content": "Say this is a test!"}];
+      const temperature = 0;
+      const max_tokens = 10;
+      const top_p = 0.1;
+      return callOpenAI(OPENAI_API_KEY, model, messages, temperature, max_tokens, top_p);
     },
   },
 ];

@@ -9,3 +9,6 @@ src/frontend/src/compiled-aqua/
 **/node_modules
 **/target/
 .repl_history
+.env
+.env.local
+
