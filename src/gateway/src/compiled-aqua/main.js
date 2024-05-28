@@ -555,6 +555,114 @@ export function getInfo(...args) {
     );
 }
 
+export const callOpenAI_script = `
+(xor
+ (seq
+  (seq
+   (seq
+    (seq
+     (seq
+      (seq
+       (seq
+        (seq
+         (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
+         (call %init_peer_id% ("getDataSrv" "api_key") [] -api_key-arg-)
+        )
+        (call %init_peer_id% ("getDataSrv" "model") [] -model-arg-)
+       )
+       (call %init_peer_id% ("getDataSrv" "messages") [] -messages-arg-)
+      )
+      (call %init_peer_id% ("getDataSrv" "temperature") [] -temperature-arg-)
+     )
+     (call %init_peer_id% ("getDataSrv" "max_tokens") [] -max_tokens-arg-)
+    )
+    (call %init_peer_id% ("getDataSrv" "top_p") [] -top_p-arg-)
+   )
+   (xor
+    (call -relay- ("myService" "callOpenAI") [-api_key-arg- -model-arg- -messages-arg- -temperature-arg- -max_tokens-arg- -top_p-arg-] ret)
+    (fail :error:)
+   )
+  )
+  (call %init_peer_id% ("callbackSrv" "response") [ret])
+ )
+ (call %init_peer_id% ("errorHandlingSrv" "error") [:error: 0])
+)
+`;
+
+
+export function callOpenAI(...args) {
+    return callFunction$$(
+        args,
+        {
+    "functionName": "callOpenAI",
+    "arrow": {
+        "domain": {
+            "fields": {
+                "api_key": {
+                    "name": "string",
+                    "tag": "scalar"
+                },
+                "model": {
+                    "name": "string",
+                    "tag": "scalar"
+                },
+                "messages": {
+                    "type": {
+                        "name": "Message",
+                        "fields": {
+                            "content": {
+                                "name": "string",
+                                "tag": "scalar"
+                            },
+                            "role": {
+                                "name": "string",
+                                "tag": "scalar"
+                            }
+                        },
+                        "tag": "struct"
+                    },
+                    "tag": "array"
+                },
+                "temperature": {
+                    "name": "f64",
+                    "tag": "scalar"
+                },
+                "max_tokens": {
+                    "name": "i32",
+                    "tag": "scalar"
+                },
+                "top_p": {
+                    "name": "f64",
+                    "tag": "scalar"
+                }
+            },
+            "tag": "labeledProduct"
+        },
+        "codomain": {
+            "items": [
+                {
+                    "name": "string",
+                    "tag": "scalar"
+                }
+            ],
+            "tag": "unlabeledProduct"
+        },
+        "tag": "arrow"
+    },
+    "names": {
+        "relay": "-relay-",
+        "getDataSrv": "getDataSrv",
+        "callbackSrv": "callbackSrv",
+        "responseSrv": "callbackSrv",
+        "responseFnName": "response",
+        "errorHandlingSrv": "errorHandlingSrv",
+        "errorFnName": "error"
+    }
+},
+        callOpenAI_script
+    );
+}
+
 export const runDeployedServices_script = `
 (xor
  (seq

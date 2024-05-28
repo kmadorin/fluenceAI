@@ -8,7 +8,7 @@ use "hosts.aqua"
 import "services.aqua"
 
 -- IMPORTANT: Add exports for all functions that you want to run
-export helloWorld, helloWorldRemote, getInfo, getInfos
+export helloWorld, helloWorldRemote, getInfo, getInfos, callOpenAI
 
 -- DOCUMENTATION:
 -- https://fluence.dev
@@ -92,6 +92,12 @@ func helloWorldRemote(name: string) -> string:
         from_msg <- Op.concat_strings(hello_msg, "! From ")
         from_peer_msg <- Op.concat_strings(from_msg, HOST_PEER_ID)
     <- from_peer_msg
+
+-- remote
+func callOpenAI(api_key: string, model: string, messages: []Message, temperature: f64, max_tokens: i32, top_p: f64) -> string:
+		on HOST_PEER_ID:
+			gpt_module_response <- MyService.callOpenAI(api_key, model, messages, temperature, max_tokens, top_p)
+		<- gpt_module_response
 
 -- request response
 func getInfo() -> Info, PeerId:

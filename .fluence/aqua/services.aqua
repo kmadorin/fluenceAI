@@ -1,5 +1,10 @@
 aqua Services declares *
 
 
+data Message:
+  role: string
+  content: string
+
 service MyService("myService"):
+  callOpenAI(api_key: string, model: string, messages: []Message, temperature: f64, max_tokens: i32, top_p: f64) -> string
   greeting(name: string) -> string
