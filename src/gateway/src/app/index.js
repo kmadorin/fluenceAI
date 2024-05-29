@@ -3,7 +3,7 @@ import relays from "../relays.json" assert { type: "json" };
 import { Type } from "@sinclair/typebox";
 
 
-import { helloWorld, helloWorldRemote, showSubnet, runDeployedServices } from "../compiled-aqua/main.js";
+import { helloWorld, helloWorldRemote, callOpenAI, showSubnet, runDeployedServices } from "../compiled-aqua/main.js";
 
 const DEFAULT_ACCESS_TOKEN = "abcdefhi";
 
@@ -63,6 +63,15 @@ export default async function (server) {
     await Fluence.disconnect();
   });
 
+  // const callbackBodyOpenAI = Type.Object({
+  //   api_key: Type.String(),
+  //   model: Type.String(),
+  //   messages: Type.Array(Type.Object()),
+  //   temperature: Type.Number(),
+  //   max_tokens: Type.Number(),
+  //   top_p: Type.Number(),
+  // });
+
   const callbackBody = Type.Object({
     name: Type.String(),
   });
@@ -93,6 +102,15 @@ export default async function (server) {
     async (request, reply) => {
       const { name } = request.body;
       const result = await helloWorld(name);
+      return reply.send(result);
+    },
+  );
+
+  server.post(
+    "/my/callback/callOpenAI",
+    async (request, reply) => {
+      const { api_key, model, messages, temperature, max_tokens, top_p } = request.body;
+      const result = await callOpenAI(api_key, model, messages, temperature, max_tokens, top_p);
       return reply.send(result);
     },
   );
