@@ -21,12 +21,12 @@ pub struct Message {
 
 #[marine]
 pub fn callOpenAI(api_key: &str, model: &str, messages: Vec<Message>, temperature: f64, max_tokens: i32, top_p: f64) -> String {
-		openai(api_key, model, messages, temperature, max_tokens, top_p)
+	openai(api_key, model, messages, temperature, max_tokens, top_p)
 }
 
 // importing gpt module
 #[marine]
-#[module_import("host")]
+#[module_import("gpt")]
 extern "C" {
 	pub fn openai(api_key: &str, model: &str, messages: Vec<Message>, temperature: f64, max_tokens: i32, top_p: f64) -> String;
 }

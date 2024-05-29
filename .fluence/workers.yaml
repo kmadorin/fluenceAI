@@ -12,8 +12,8 @@ deals:
       {
         myDeployment:
           {
-            definition: bafkreidjzys6g3b3xp3v26jv2houivxm5enqurifbbwvfktc3q3rmzsgda,
-            timestamp: 2024-05-28T17:34:51.719Z,
+            definition: bafkreigzxsps4uyknodefm2qmaxwfyd4qeyjiewqmt7lcqce5ygpsrquie,
+            timestamp: 2024-05-29T08:44:16.758Z,
             dealIdOriginal: "0xCe85503De9399D4dECa3c0b2bb3e9e7CFCBf9C6B",
             dealId: ce85503de9399d4deca3c0b2bb3e9e7cfcbf9c6b,
             chainNetwork: local,
