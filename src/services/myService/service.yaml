@@ -15,3 +15,5 @@ modules:
     get: curl-adapter
   gpt:
     get: gpt
+  llama:
+    get: llama

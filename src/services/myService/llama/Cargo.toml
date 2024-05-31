@@ -1,0 +1,19 @@
+[package]
+name = "llama"
+version = "0.1.0"
+edition = "2018"
+
+[[bin]]
+name = "llama"
+path = "src/main.rs"
+
+[dependencies]
+marine-rs-sdk = "0.14.0"
+llm = { git = "https://github.com/rustformers/llm" , branch = "main", default-features = false, features = ["models"] }
+
+
+[dev-dependencies]
+marine-rs-sdk-test = "0.16.1"
+
+[target.wasm32-wasi]
+rustflags=["-C", "link-args=--sysroot=/wasi-sdk/share/wasi-sysroot"]

@@ -8,6 +8,7 @@
 src/frontend/src/compiled-aqua/
 **/node_modules
 **/target/
+wasi-sdk
 .repl_history
 .env
 .env.local
