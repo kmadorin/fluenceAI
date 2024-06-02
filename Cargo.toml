@@ -2,5 +2,6 @@
 members = [
   "src/services/myService/myService",
   "src/services/myService/curl-adapter",
-  "src/services/myService/gpt"
+  "src/services/myService/gpt",
+  "src/services/myService/llama"
 ]

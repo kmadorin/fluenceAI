@@ -35,7 +35,7 @@ export type GetInfoResult = Promise<GetInfoResultType>;
 
 export type CallOpenAIParams = [api_key: string, model: string, messages: { content: string; role: string; }[], temperature: number, max_tokens: number, top_p: number, config?: {ttl?: number}] | [peer: IFluenceClient$$, api_key: string, model: string, messages: { content: string; role: string; }[], temperature: number, max_tokens: number, top_p: number, config?: {ttl?: number}];
 
-export type CallOpenAIResult = Promise<string>;
+export type CallOpenAIResult = Promise<string | null>;
 
 export type RunDeployedServicesParams = [config?: {ttl?: number}] | [peer: IFluenceClient$$, config?: {ttl?: number}];
 
@@ -44,6 +44,10 @@ export type RunDeployedServicesResult = Promise<{ answer: string | null; worker:
 export type HelloWorldParams = [name: string, config?: {ttl?: number}] | [peer: IFluenceClient$$, name: string, config?: {ttl?: number}];
 
 export type HelloWorldResult = Promise<string>;
+
+export type CallOpenAISequenceParams = [api_key: string, model: string, messages: { content: string; role: string; }[], temperature: number, max_tokens: number, top_p: number, config?: {ttl?: number}] | [peer: IFluenceClient$$, api_key: string, model: string, messages: { content: string; role: string; }[], temperature: number, max_tokens: number, top_p: number, config?: {ttl?: number}];
+
+export type CallOpenAISequenceResult = Promise<{ answer: string | null; worker: { host_id: string; pat_id: string; worker_id: string | null; }; }[]>;
 
 export type GetInfosParams = [peers: string[], config?: {ttl?: number}] | [peer: IFluenceClient$$, peers: string[], config?: {ttl?: number}];
 

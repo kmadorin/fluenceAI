@@ -1,7 +1,7 @@
 #![allow(non_snake_case)]
 use marine_rs_sdk::marine;
 use marine_rs_sdk::module_manifest;
-use llm::Model;
+// use llm::Model;
 
 module_manifest!();
 

@@ -1,7 +1,12 @@
 import fastify from "fastify";
+import cors from '@fastify/cors';
 
 const server = fastify({
   logger: true,
+});
+
+server.register(cors, {
+  origin: "*",
 });
 
 await server.register(import("./app/index.js"));

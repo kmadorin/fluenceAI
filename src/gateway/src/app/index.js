@@ -47,17 +47,17 @@ export default async function (server) {
     });
   });
 
-  
 
-  server.addHook("onRequest", async (request, reply) => {
-    const header = request.query.access_token ?? request.headers.access_token;
-    if (header !== ACCESS_TOKEN) {
-      await reply.status(403).send({
-        error: "Unauthorized",
-        statusCode: 403,
-      });
-    }
-  });
+
+  // server.addHook("onRequest", async (request, reply) => {
+  // const header = request.query.access_token ?? request.headers.access_token;
+  // if (header !== ACCESS_TOKEN) {
+  //   await reply.status(403).send({
+  //     error: "Unauthorized",
+  //     statusCode: 403,
+  //   });
+  // }
+  // });
 
   server.addHook("onClose", async () => {
     await Fluence.disconnect();
@@ -76,11 +76,11 @@ export default async function (server) {
     name: Type.String(),
   });
 
-  
+
 
   const callbackResponse = Type.String();
 
-  
+
 
   const runDeployedServicesResponse = Type.Array(
     Type.Object({
@@ -93,7 +93,7 @@ export default async function (server) {
     }),
   );
 
-  
+
 
   // Request and response
   server.post(
@@ -107,11 +107,24 @@ export default async function (server) {
   );
 
   server.post(
-    "/my/callback/callOpenAI",
+    "/openai/v1/chat/completions",
     async (request, reply) => {
-      const { api_key, model, messages, temperature, max_tokens, top_p } = request.body;
-      const result = await callOpenAI(api_key, model, messages, temperature, max_tokens, top_p);
-      return reply.send(result);
+      // console.log('headers:', request.headers);
+      const api_key = request.headers.authorization.replace("Bearer ", "");
+      console.log('api_key:', api_key);
+      console.log('body:', request.body);
+      const { model, messages, temperature, max_tokens, top_p } = request.body;
+
+      try {
+        const result = await callOpenAI(api_key, model, messages, temperature, max_tokens, top_p);
+        return reply.send(JSON.parse(result));
+      } catch (e) {
+        console.error(e);
+        return reply.status(500).send({
+          error: e.message,
+          statusCode: 500,
+        });
+      }
     },
   );
 

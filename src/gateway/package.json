@@ -9,10 +9,11 @@
     "start": "node --no-warnings src/dev.js"
   },
   "dependencies": {
-    "@fluencelabs/js-client": "0.9.0",
-    "fastify": "4.25.2",
+    "@fastify/cors": "^9.0.1",
     "@fastify/rate-limit": "9.1.0",
+    "@fluencelabs/js-client": "0.9.0",
     "@sinclair/typebox": "0.32.11",
-    "dotenv": "16.4.2"
+    "dotenv": "16.4.2",
+    "fastify": "4.25.2"
   }
 }

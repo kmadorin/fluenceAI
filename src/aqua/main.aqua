@@ -8,7 +8,7 @@ use "hosts.aqua"
 import "services.aqua"
 
 -- IMPORTANT: Add exports for all functions that you want to run
-export helloWorld, helloWorldRemote, getInfo, getInfos, callOpenAI
+export helloWorld, helloWorldRemote, getInfo, getInfos, callOpenAI, callOpenAISequence, runDeployedServices, showSubnet
 
 -- DOCUMENTATION:
 -- https://fluence.dev
@@ -94,10 +94,39 @@ func helloWorldRemote(name: string) -> string:
     <- from_peer_msg
 
 -- remote
-func callOpenAI(api_key: string, model: string, messages: []Message, temperature: f64, max_tokens: i32, top_p: f64) -> string:
-		on HOST_PEER_ID:
-			gpt_module_response <- MyService.callOpenAI(api_key, model, messages, temperature, max_tokens, top_p)
-		<- gpt_module_response
+func callOpenAI(api_key: string, model: string, messages: []Message, temperature: f64, max_tokens: i32, top_p: f64) -> ?string:
+    deals <- Deals.get()
+    dealId = deals.myDeployment!.dealIdOriginal
+    answer: *string
+
+    on HOST_PEER_ID:
+        subnet <- Subnet.resolve(dealId)
+    if subnet.success == false:
+        Console.print(["Failed to resolve subnet: ", subnet.error])
+
+    for w <- subnet.workers try:
+        if w.worker_id != nil:
+            on w.worker_id! via w.host_id:
+                answer <- MyService.callOpenAI(api_key, model, messages, temperature, max_tokens, top_p)
+    <- answer
+    
+func callOpenAISequence(api_key: string, model: string, messages: []Message, temperature: f64, max_tokens: i32, top_p: f64) -> []Answer:
+    deals <- Deals.get()
+    dealId = deals.myDeployment!.dealIdOriginal
+    answers: *Answer
+    on HOST_PEER_ID:
+        subnet <- Subnet.resolve(dealId)
+    if subnet.success == false:
+        Console.print(["Failed to resolve subnet: ", subnet.error])
+
+    for w <- subnet.workers:
+        if w.worker_id == nil:
+            answers <<- Answer(answer=nil, worker=w)
+        else:
+            on w.worker_id! via w.host_id:
+                answer <- MyService.callOpenAI(api_key, model, messages, temperature, max_tokens, top_p)
+                answers <<- Answer(answer=?[answer], worker=w)
+    <- answers
 
 -- request response
 func getInfo() -> Info, PeerId:
